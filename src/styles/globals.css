@@ -31,3 +31,185 @@ body {
     text-wrap: balance;
   }
 }
+
+
+input,
+select {
+  @apply outline-none focus:outline-none;
+}
+
+input[type="password"] {
+  -webkit-text-security: disc;
+  letter-spacing: 2px;
+  /* font-size: ; */
+}
+
+.custom-loader {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #fff 94%, #0000) top/4px 4px no-repeat,
+    conic-gradient(#0000 30%, #fff);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  animation: s3 1s infinite linear;
+}
+
+.custom-loader-prime {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #e05a8a 94%, #0000) top/4px 4px no-repeat,
+    conic-gradient(#0000 30%, #e05a8a);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  animation: s3 1s infinite linear;
+}
+
+.custom-loader-screen {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #e05a8a 94%, #0000) top/4px 4px no-repeat,
+    conic-gradient(#0000 30%, #e05a8a);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  animation: s3 1s infinite linear;
+}
+
+.custom-loader-prime-main {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #e05a8a 94%, #0000) top/4px 4px no-repeat,
+    conic-gradient(#0000 30%, #e05a8a);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+  animation: s3 1s infinite linear;
+}
+
+@keyframes s3 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+/* Set the initial position of the slide-content outside the viewport on the right */
+.slide-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.slide-content {
+  position: absolute;
+  right: 0;
+  /* Initial position outside the viewport on the right */
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 0px;
+  /* Add other styles for your content */
+  /* For example: color, font-size, etc. */
+  /* transition properties for smooth animation */
+  transition: left 0.7s ease-in-out;
+}
+
+/* Animation classes for sliding in and out */
+.slide-in {
+  left: 0;
+  /* Final position inside the viewport */
+}
+
+.slide-out {
+  left: 100%;
+  /* Slide out to the left */
+}
+
+/* Style the toggle button (optional) */
+.toggle-button {
+  margin-bottom: 10px;
+}
+
+.searchComponent {
+  position: relative;
+  display: flex;
+}
+
+.searchIcon {
+  cursor: pointer;
+  padding: 10px;
+  transition: background-color 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.searchIcon:hover {
+  background-color: #f0f0f0;
+}
+
+.searchInput {
+  width: 0;
+  border: none;
+  outline: none;
+  transition: width 0.3s ease-in-out 0.1s;
+}
+
+.searchInput[data-isopen="true"] {
+  width: 350px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* line clipping */
+.two-line-clip {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+
+body {
+  --sb-track-color: #dce2e4;
+  --sb-thumb-color: #989898;
+  --sb-size: 4px;
+
+  scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+body::-webkit-scrollbar {
+  width: var(--sb-size)
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 8px;
+}
+
+
+.scrollbar {
+  scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: var(--sb-size)
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 8px;
+}
