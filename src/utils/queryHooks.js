@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 
-import { getAvailableChitfunds, getJoinedChitfunds, joinChitfund, getChitfund, payChitAmount, placeBid, startAuction } from "./queries";
+import { getAvailableChitfunds, getJoinedChitfunds, joinChitfund, getChitfund, payChitAmount, placeBid, startAuction, createChitfund, addBalanceToUser } from "./queries";
 
 
 export const useActiveChifunds = () => {
@@ -72,6 +72,28 @@ export const usePlaceBid = (handleSuccess, handleError) => {
 
 export const useStartAuction = (handleSuccess, handleError) => {
     return useMutation(startAuction, {
+        onSuccess(res) {
+            handleSuccess(res);
+        },
+        onError(err) {
+            handleError(err);
+        },
+    });
+}
+
+export const useCreateChitfund = (handleSuccess, handleError) => {
+    return useMutation(createChitfund, {
+        onSuccess(res) {
+            handleSuccess(res);
+        },
+        onError(err) {
+            handleError(err);
+        },
+    });
+}
+
+export const useAddBalance = (handleSuccess, handleError) => {
+    return useMutation(addBalanceToUser, {
         onSuccess(res) {
             handleSuccess(res);
         },

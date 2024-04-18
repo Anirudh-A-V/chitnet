@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, query, where, updateDoc, getDoc, documentId } from "firebase/firestore";
+import { collection, doc, getDocs, query, where, updateDoc, getDoc, documentId, addDoc, setDoc } from "firebase/firestore";
 import { firestore } from "./firebase";
 import Cookies from "js-cookie";
 
@@ -104,6 +104,43 @@ export const startAuction = async ({ id }) => {
 }
 
 export const addBalance = async ({ uid, amount }) => {
+    const userRef = doc(firestore, "Users", uid);
+    const user = await getDoc(userRef);
+    const balance = user.data().balance + amount;
+    await updateDoc(userRef, {
+        balance: balance,
+    });
+}
+
+export const createChitfund = async ({ chitAmount, maxSubscribers, monthlyAmount, duration, startDate }) => {
+    const chitfundRef = doc(collection(firestore, "Chitfunds"));
+    await setDoc(chitfundRef, {
+        status: "NOT STARTED",
+        duration: duration,
+        maxSubscribers: maxSubscribers,
+        startDate: startDate,
+        joinedUsers: [],
+        chitAmount: chitAmount,
+        chitBalance: 0,
+        noOfSubscribers: 1,
+        monthlyAmount: monthlyAmount,
+        owner: JSON.parse(Cookies.get("admin")).localId,
+        currentWinner: "",
+        previousWinners: [],
+        paidUsers: [],
+        biddedValues: [],
+        currentMonth: 1,
+        address: "0xb8f43EC36718ecCb339B75B727736ba14F174d77"
+    });
+    const userRef = doc(firestore, "Users", JSON.parse(Cookies.get("admin")).localId);
+    const user = await getDoc(userRef)
+    const joinedChitfunds = user.data().joinedChitfunds;
+    await updateDoc(userRef, {
+        joinedChitfunds: [...joinedChitfunds, chitfundRef.id],
+    });
+}
+
+export const addBalanceToUser = async ({ uid, amount }) => {
     const userRef = doc(firestore, "Users", uid);
     const user = await getDoc(userRef);
     const balance = user.data().balance + amount;

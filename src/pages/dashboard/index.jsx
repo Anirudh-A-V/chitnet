@@ -5,11 +5,14 @@ import Layout from '@/components/dashboard/Layout';
 import Image from 'next/image';
 import { Menu, Transition } from '@headlessui/react'
 import Head from 'next/head';
+import JoinedChitfunds from '@/components/JoinedChitfunds';
+import { useJoinedChitfunds } from '@/utils/queryHooks';
 
 
 const Dashboard = () => {
   const { logout } = useAuth();
 
+  const { isLoading: isLoadingJoined, isError: isErrorJoined, data: joinedChitfunds, error: errorJoinedChitfunds } = useJoinedChitfunds();
   return (
     <>
       <Head>
@@ -57,7 +60,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div className='w-full  border border-b-[#E5E9EB] border-t-0 border-x-0'></div>
-          <div className='flex flex-row justify-center items-center h-full'>
+          {/* <div className='flex flex-row justify-center items-center h-full'>
             <div className='flex flex-col justify-center items-center w-full'>
               <Image src='/Dashboard/Logo-bg.svg' width={300} height={300} alt='logo' />
               <p className='text-[#7d7f81] text-4xl font-bold mt-10'>Welcome to the dashboard</p>
@@ -65,7 +68,51 @@ const Dashboard = () => {
                 Goto Users section and perform actions
               </p>
             </div>
+          </div> */}
+          <div className=' flex flex-col justify-start items-start p-10 w-full h-full'>
+
+            <div className='flex flex-row justify-start gap-10 w-full'>
+              <div className='flex flex-col justify-start relative p-6 min-w-[300px] h-[180px] items-start rounded-xl'
+                style={{
+                  background: 'linear-gradient(90deg, #3D59B9 0%, #2E4BAD 100%)'
+                }}
+              >
+                <p className='text-white text-base font-medium '>balance</p>
+                <p className='text-white text-5xl font-semibold'>₹ 30000</p>
+                <button
+                  className='absolute bottom-4 right-4 bg-white text-primary-blue px-4 py-1 rounded-md font-medium'
+                >
+                  Add Balance
+                </button>
+              </div>
+
+              <div className='flex flex-col justify-start relative  p-6 min-w-[300px] h-[180px] items-start rounded-xl'
+                style={{
+                  background: 'linear-gradient(90deg, #E3E7F4 0%, #C6CFEB 100%)'
+                }}
+              >
+                <p className='text-primary-blue text-base font-medium '>Chitfunds Joined</p>
+                <p className='text-primary-blue text-5xl font-semibold'>2</p>
+              </div>
+
+              <div className='flex flex-col justify-start relative p-6 w-full h-[180px] items-start rounded-xl'
+                style={{
+                  background: 'linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 100%)'
+                }}
+              >
+                <p className='text-primary-blue text-base font-medium '>Anirudh A V</p>
+                <p className='text-primary-blue text-base font-semibold'>anirudh.av02@gmail.com</p>
+                <p className='text-primary-blue text-base font-semibold'>BZPPV2628L</p>
+              </div>
+            </div>
+
+            <div className='flex flex-col justify-start items-start w-screen mt-10'>
+              <h1 className='text-2xl font-bold text-[#252C32]'>Joined Chitfunds</h1>
+              <JoinedChitfunds loading={isLoadingJoined} chitfunds={joinedChitfunds} />
+            </div>
+
           </div>
+
         </div>
       </Layout>
     </>

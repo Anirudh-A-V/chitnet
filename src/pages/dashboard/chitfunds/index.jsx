@@ -5,9 +5,11 @@ import AvailableChitfunds from "@/components/AvailableChitfunds";
 import { useActiveChifunds, useJoinedChitfunds } from "@/utils/queryHooks"
 import Head from "next/head";
 import JoinedChitfunds from "@/components/JoinedChitfunds"
+import Cookies from "js-cookie";
+import CreateChitfund from "@/components/CreateChitfund";
 
 
-const tabs = ["Available Chitfunds", "Joined Chitfunds"];
+const tabs = ["Available Chitfunds", "Joined Chitfunds", "Your Chitfunds"];
 
 const Tab = ({ tab, active, count, makeActive }) => (
 	<button
@@ -23,7 +25,7 @@ const Tab = ({ tab, active, count, makeActive }) => (
 
 function Users() {
 	const [tabIndex, setTabIndex] = useState(0);
-	const [detailsModal, setDetailsModal] = useState(false);
+	const [createModal, setCreateModel] = useState(false);
 
 	const { isLoading: isLoadingAvailable, isError: isErrorAvailable, data: availableChitfunds, error: errorAvailableChitfunds } = useActiveChifunds();
 
@@ -41,10 +43,13 @@ function Users() {
 				<title>Chitfunds</title>
 			</Head>
 			<Layout>
-				<div>
+				<div className="flex justify-between items-center">
 					<div className="px-7 py-4">
 						<h3 className="text-2xl font-semibold">Chitfunds</h3>
 					</div>
+					<button onClick={() => setCreateModel(true)} className="px-4 py-2 bg-blue-700 hover:bg-blue-400 text-white font-medium rounded-lg mr-7">
+						Create Chitfund
+					</button>
 				</div>
 				<div className="h-0.5 w-full bg-slate-200"></div>
 
@@ -54,7 +59,13 @@ function Users() {
 							<Tab
 								tab={tab}
 								active={tabIndex === index}
-								count={index === 0 ? availableChitfunds?.length : joinedChitfunds?.length}
+								count={
+									index === 0 ?
+										availableChitfunds ? availableChitfunds.filter((chitfund) => chitfund?.owner !== JSON.parse(Cookies.get("admin")).localId).length : availableChitfunds?.length :
+										index === 1 ?
+											joinedChitfunds?.length :
+											joinedChitfunds ? joinedChitfunds.filter(chitfund => chitfund?.owner === JSON.parse(Cookies.get("admin")).localId).length : 0
+								}
 								makeActive={() => setTabIndex(index)}
 								key={index}
 							/>
@@ -62,11 +73,23 @@ function Users() {
 					</div>
 
 					{tabIndex === 0 ? (
-						<AvailableChitfunds loading={isLoadingAvailable} chitfunds={availableChitfunds} setDetailsModal={setDetailsModal}/>
+						<AvailableChitfunds loading={isLoadingAvailable} chitfunds={availableChitfunds ? availableChitfunds.filter((chitfund) => chitfund?.owner !== JSON.parse(Cookies.get("admin")).localId) : availableChitfunds} setDetailsModal={setCreateModel} />
+					) : tabIndex === 1 ? (
+						<JoinedChitfunds loading={isLoadingJoined} chitfunds={joinedChitfunds} />
 					) : (
-						<JoinedChitfunds loading={isLoadingJoined} chitfunds={joinedChitfunds} setDetailsModal={setDetailsModal}/>
+						joinedChitfunds.some(chitfund => chitfund?.owner === JSON.parse(Cookies.get("admin")).localId) ? (
+							<JoinedChitfunds loading={isLoadingJoined} chitfunds={joinedChitfunds ? joinedChitfunds.filter((chitfund) => chitfund?.owner === JSON.parse(Cookies.get("admin")).localId) : joinedChitfunds} />
+						) : (
+							<div className="flex justify-center py-5 text-sm text-gray-600">
+								0 Chitfunds created by you
+							</div>
+						)
 					)}
 				</div>
+
+				{createModal && (
+					<CreateChitfund openModel={createModal} setOpenModel={setCreateModel} />
+				)}
 			</Layout>
 		</>
 	);

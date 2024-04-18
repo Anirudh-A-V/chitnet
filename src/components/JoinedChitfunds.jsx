@@ -44,10 +44,10 @@ const Chitfund = ({ chitfund, isLastChild }) => {
 };
 
 
-const JoinedChitfunds = ({ chitfunds, loading, setDetails, setDetailsModal }) => {
+const JoinedChitfunds = ({ chitfunds, loading }) => {
     return (
         <div className="p-3">
-            <table className="boredr-spacing-y w-full table-auto">
+            <table className="boredr-spacing-y w-full min-w-[1000px] table-auto">
                 <thead>
                     <tr className="text-sm text-[#64748B]">
                         <TableCell style="py-1">Address</TableCell>
