@@ -103,27 +103,18 @@ export const startAuction = async ({ id }) => {
     await addBalance({ uid: winner, amount: chitfund.chitAmount });
 }
 
-export const addBalance = async ({ uid, amount }) => {
-    const userRef = doc(firestore, "Users", uid);
-    const user = await getDoc(userRef);
-    const balance = user.data().balance + amount;
-    await updateDoc(userRef, {
-        balance: balance,
-    });
-}
-
 export const createChitfund = async ({ chitAmount, maxSubscribers, monthlyAmount, duration, startDate }) => {
     const chitfundRef = doc(collection(firestore, "Chitfunds"));
     await setDoc(chitfundRef, {
         status: "NOT STARTED",
-        duration: duration,
-        maxSubscribers: maxSubscribers,
+        duration: parseInt(duration) || duration,
+        maxSubscribers: parseInt(maxSubscribers) || maxSubscribers,
         startDate: startDate,
         joinedUsers: [],
-        chitAmount: chitAmount,
+        chitAmount: parseInt(chitAmount) || chitAmount,
         chitBalance: 0,
         noOfSubscribers: 1,
-        monthlyAmount: monthlyAmount,
+        monthlyAmount: parseInt(monthlyAmount) || monthlyAmount,
         owner: JSON.parse(Cookies.get("admin")).localId,
         currentWinner: "",
         previousWinners: [],
@@ -143,10 +134,18 @@ export const createChitfund = async ({ chitAmount, maxSubscribers, monthlyAmount
 export const addBalanceToUser = async ({ uid, amount }) => {
     const userRef = doc(firestore, "Users", uid);
     const user = await getDoc(userRef);
-    const balance = user.data().balance + amount;
+    console.log("User : ", user.data());
+    const balance = parseInt(user.data().balance) + parseInt(amount);
+    console.log("Balance : ", balance);
     await updateDoc(userRef, {
         balance: balance,
     });
+}
+
+
+export const getUserDetails = async (uid) => {
+    const user = await getDoc(doc(firestore, "Users", uid));
+    return user.data();
 }
 
 /**

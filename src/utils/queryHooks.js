@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 
-import { getAvailableChitfunds, getJoinedChitfunds, joinChitfund, getChitfund, payChitAmount, placeBid, startAuction, createChitfund, addBalanceToUser } from "./queries";
+import { getAvailableChitfunds, getJoinedChitfunds, joinChitfund, getChitfund, payChitAmount, placeBid, startAuction, createChitfund, addBalanceToUser, getUserDetails } from "./queries";
 
 
 export const useActiveChifunds = () => {
@@ -99,6 +99,17 @@ export const useAddBalance = (handleSuccess, handleError) => {
         },
         onError(err) {
             handleError(err);
+        },
+    });
+}
+
+export const useGetUserDetails = (id) => {
+    return useQuery({
+        queryKey: [`User Details`],
+        queryFn: () => getUserDetails(id),
+        select: (res) => {
+            const data = res;
+            return data;
         },
     });
 }

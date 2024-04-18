@@ -1,9 +1,11 @@
+"use client"
 import React, { Fragment, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Dialog, Transition } from '@headlessui/react';
 import { useCreateChitfund } from '@/utils/queryHooks';
 import { toast } from 'react-toastify';
 import { useQueryClient } from 'react-query';
+import { handleSendTransaction } from '@/utils/functions';
 
 const CreateChitfund = ({ openModel, setOpenModel }) => {
     const queryClient = useQueryClient();
@@ -32,15 +34,16 @@ const CreateChitfund = ({ openModel, setOpenModel }) => {
     const onSubmit = async (data) => {
         //2023-12-14T19:49
         console.log(data)
-        const dataForUpdate = {
+        const dataForCreate = {
             chitAmount: data.chitAmount,
             maxSubscribers: data.maxSubscribers,
             monthlyAmount: data.monthlyAmount,
             startDate: data.startDate,
             duration: data.duration,
         };
-        console.log("Data for Update : ", dataForUpdate)
-        createChitfundMutation({ ...dataForUpdate });
+        console.log("Data for Create : ", dataForCreate)
+        // handleSendTransaction();
+        createChitfundMutation({ ...dataForCreate });
         setOpenModel(false);
     };
 

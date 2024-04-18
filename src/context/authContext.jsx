@@ -17,6 +17,7 @@ const AuthContext = createContext({
     invalidCredentials: false,
     loading: false,
     winner: false,
+    accounts: [],
     setWinner: () => { }
 });
 
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useState('');
     const [winner, setWinner] = useState(false);
+    const [accounts, setAccounts] = useState([]);
 
     const mutation = useLogin({
         setIsAuthenticated,
@@ -86,7 +88,9 @@ export const AuthProvider = ({ children }) => {
                 logout,
                 loading,
                 winner,
-                setWinner
+                setWinner,
+                accounts,
+                setAccounts
             }}
         >
             {children}
