@@ -33,7 +33,8 @@ const useLogin = ({
     setEmail,
     setToken,
     setRefreshToken,
-    setInvalidCredentials
+    setInvalidCredentials,
+    setUserId
 }) => {
     return useMutation((formData) => signInWithEmail(formData), {
         onSuccess: (data) => {
@@ -41,6 +42,7 @@ const useLogin = ({
             setEmail(data.email);
             setToken(data.accessToken);
             setRefreshToken(data.refreshToken);
+            setUserId(data.localId);
         },
         onError: () => {
             setInvalidCredentials(true);

@@ -11,10 +11,13 @@ const AuthContext = createContext({
     email: '',
     token: '',
     refreshToken: '',
+    userId: '',
     login: async (email, password) => { },
     logout: async () => { },
     invalidCredentials: false,
     loading: false,
+    winner: false,
+    setWinner: () => { }
 });
 
 
@@ -26,6 +29,8 @@ export const AuthProvider = ({ children }) => {
     const [refreshToken, setRefreshToken] = useState('');
     const [invalidCredentials, setInvalidCredentials] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [userId, setUserId] = useState('');
+    const [winner, setWinner] = useState(false);
 
     const mutation = useLogin({
         setIsAuthenticated,
@@ -33,6 +38,7 @@ export const AuthProvider = ({ children }) => {
         setToken,
         setRefreshToken,
         setInvalidCredentials,
+        setUserId
     });
 
     const router = useRouter();
@@ -56,6 +62,7 @@ export const AuthProvider = ({ children }) => {
             setEmail('');
             setToken('');
             setRefreshToken('');
+            setUserId('');
             setLoading(false)
             Cookies.remove('admin');
             router.push('/');
@@ -74,9 +81,12 @@ export const AuthProvider = ({ children }) => {
                 token,
                 refreshToken,
                 invalidCredentials,
+                userId,
                 login,
                 logout,
                 loading,
+                winner,
+                setWinner
             }}
         >
             {children}
