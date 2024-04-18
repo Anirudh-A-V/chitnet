@@ -7,7 +7,9 @@ export const getJoinedChitfunds = async () => {
     const snapshot = await getDoc(doc(firestore, "Users", uid));
     const data = snapshot.data();
     const chitfunds = data?.joinedChitfunds
+    console.log("Chitfunds joined by user : ", data);
     if (chitfunds.length === 0) {
+        console.log("No chitfunds joined by user");
         return [];
     }
     const chitfundQuery = query(collection(firestore, "Chitfunds"), where(documentId(), "in", chitfunds));
@@ -21,7 +23,9 @@ export const getAvailableChitfunds = async () => {
     const availableChitfund = query(collection(firestore, "Chitfunds"), where("status", "==", "NOT STARTED"));
     const snapshot = await getDocs(availableChitfund);
     const chitfunds = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    console.log("Chitfunds : ", chitfunds);
+    if (chitfunds.length !== 0) {
+        console.log("Chitfunds : ", chitfunds);
+    }
     return chitfunds;
 }
 
@@ -32,6 +36,9 @@ export const getChitfund = async (id) => {
 }
 
 export const joinChitfund = async ({ id, uid }) => {
+    const userRef = doc(firestore, "Users", uid);
+    const user = await getDoc(userRef);
+    const joinedChitfunds = user.data().joinedChitfunds;
     const chitfund = await getChitfund(id);
     const joinedUsers = chitfund.joinedUsers;
     const noOfSubscribers = chitfund.noOfSubscribers;
@@ -40,6 +47,9 @@ export const joinChitfund = async ({ id, uid }) => {
         joinedUsers: [...joinedUsers, uid],
         noOfSubscribers: noOfSubscribers + 1,
         status: noOfSubscribers + 1 === chitfund.maxSubscribers ? "STARTED" : "NOT STARTED",
+    });
+    await updateDoc(userRef, {
+        joinedChitfunds: [...joinedChitfunds, id],
     });
 }
 
@@ -84,11 +94,13 @@ export const startAuction = async ({ id }) => {
     await updateDoc(chitfundRef, {
         paidUsers: [],
         biddedValues: [],
+        chitBalance: 0,
         currentWinner: winner,
         previousWinners: [...chitfund.previousWinners, winner],
         status: "STARTED",
         currentMonth: chitfund.currentMonth + 1 <= chitfund.duration ? chitfund.currentMonth + 1 : chitfund.duration,
     });
+    await addBalance({ uid: winner, amount: chitfund.chitAmount });
 }
 
 export const addBalance = async ({ uid, amount }) => {

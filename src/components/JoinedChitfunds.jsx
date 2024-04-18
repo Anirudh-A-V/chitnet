@@ -1,11 +1,7 @@
 import React from "react";
-import { toast } from "react-toastify";
 import Loading from "./Loading";
 import moment from 'moment-timezone';
 import { truncate } from "@/utils/functions";
-import { useJoinChitfund } from "@/utils/queryHooks";
-import { useQueryClient } from "react-query";
-import Cookies from "js-cookie";
 import Link from "next/link";
 
 const TableCell = ({ style, children }) => (

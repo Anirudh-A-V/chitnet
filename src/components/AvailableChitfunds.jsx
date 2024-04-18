@@ -17,6 +17,7 @@ const Chitfund = ({ chitfund, isLastChild }) => {
     const handleSuccess = (data) => {
         console.log("Response for joining chitfund : ", data);
         queryClient.invalidateQueries({ queryKey: ["Available Chitfunds"] });
+        queryClient.invalidateQueries({ queryKey: ["Joined Chitfunds"] });
         toast.success('Joined Chitfund Successfully');
     };
 
