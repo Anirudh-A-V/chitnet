@@ -100,7 +100,7 @@ export const startAuction = async ({ id }) => {
         status: "STARTED",
         currentMonth: chitfund.currentMonth + 1 <= chitfund.duration ? chitfund.currentMonth + 1 : chitfund.duration,
     });
-    await addBalance({ uid: winner, amount: chitfund.chitAmount });
+    await addBalanceToUser({ uid: winner, amount: chitfund.chitAmount });
 }
 
 export const createChitfund = async ({ chitAmount, maxSubscribers, monthlyAmount, duration, startDate }) => {
@@ -110,7 +110,7 @@ export const createChitfund = async ({ chitAmount, maxSubscribers, monthlyAmount
         duration: parseInt(duration) || duration,
         maxSubscribers: parseInt(maxSubscribers) || maxSubscribers,
         startDate: startDate,
-        joinedUsers: [],
+        joinedUsers: [JSON.parse(Cookies.get("admin")).localId],
         chitAmount: parseInt(chitAmount) || chitAmount,
         chitBalance: 0,
         noOfSubscribers: 1,

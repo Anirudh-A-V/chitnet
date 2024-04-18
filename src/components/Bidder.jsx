@@ -4,16 +4,19 @@ import { usePlaceBid } from '@/utils/queryHooks';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+import { useQueryClient } from 'react-query';
 
 const Bidder = () => {
     const [bid, setBid] = useState(0);
     const [bidStarted, setBidStarted] = useState(false);
     const router = useRouter()
+    const queryClient = useQueryClient();
 
     const { id } = router.query;
 
     const handleSuccess = (data) => {
         console.log("Response for placing bid : ", data);
+        queryClient.invalidateQueries({ queryKey: [`Chitfund ${id}`] });
         toast.success('Bid Placed Successfully');
     }
 
