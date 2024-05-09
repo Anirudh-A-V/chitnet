@@ -222,6 +222,14 @@ export const checkAllUsersPaid = async ({ id }) => {
     return joinedUsers.length === paidUsers.length;
 }
 
+export const checkAllUsersBid = async ({ id }) => {
+    const chitfund = await getChitfund(id);
+    const joinedUsers = chitfund.joinedUsers;
+    const biddedValues = chitfund.biddedValues;
+    console.log("Joined users : ", joinedUsers);
+    return joinedUsers.length === biddedValues.length;
+}
+
 
 export const getUserDetails = async (uid) => {
     const user = await getDoc(doc(firestore, "Users", uid));

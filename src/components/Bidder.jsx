@@ -48,26 +48,29 @@ const Bidder = () => {
         <>
             {
                 bidStarted ? (
-                    <div className='flex gap-1'>
-                        <input
-                            type="number"
-                            placeholder='Enter your bid amount'
-                            className='border-2 border-primary-blue px-2 py-1 text-base font-medium rounded-lg'
-                            value={bid}
-                            onChange={(e) => setBid(e.target.value)}
-                        />
-                        <button className='bg-primary-blue px-4 py-1 text-base text-white font-medium rounded-lg cursor-pointer'
-                            onClick={() => {
-                                mutate({ id: id, uid: JSON.parse(Cookies.get("admin")).localId, bidAmount: bid });
-                                
-                            }}
-                        >
-                            Place Bid
-                        </button>
+                    <div className='flex gap-10'>
+                        Bid Ends in {" "}<CountdownTime endTime={"09:30:00"} format={"HH:mm:ss"} styles={""} />
+                        <div className='flex gap-1'>
+                            <input
+                                type="number"
+                                placeholder='Enter your bid amount'
+                                className='border-2 border-primary-blue px-2 py-1 text-base font-medium rounded-lg'
+                                value={bid}
+                                onChange={(e) => setBid(e.target.value)}
+                            />
+                            <button className='bg-primary-blue px-4 py-1 text-base text-white font-medium rounded-lg cursor-pointer'
+                                onClick={() => {
+                                    mutate({ id: id, uid: JSON.parse(Cookies.get("admin")).localId, bidAmount: bid });
+
+                                }}
+                            >
+                                Place Bid
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <button className='bg-secondary-blue px-4 py-1 text-base text-white font-medium rounded-lg cursor-pointer' disabled>
-                        Bid Starts in <CountdownTime endTime={"09:00:00"} format={"HH:mm:ss"} styles={""} setBidStarted={setBidStarted} />
+                        Bid Starts in <CountdownTime endTime={"09:30:00"} format={"HH:mm:ss"} styles={""} setBidStarted={setBidStarted} />
                     </button>
                 )
             }

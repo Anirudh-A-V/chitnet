@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import { useStartAuction } from '@/utils/queryHooks'
 import { useQueryClient } from 'react-query'
 import { useAuth } from '@/context/authContext'
+import CountdownTime from './CountdownTime'
+import { checkAllUsersBid } from '@/utils/queries'
 
 const Auction = () => {
     const queryClient = useQueryClient();
@@ -26,6 +28,15 @@ const Auction = () => {
     }
 
     const { mutate, isLoading: isPlacingBid } = useStartAuction(handleSuccess, handleError);
+    const allUsersBid = checkAllUsersBid({ id });
+
+    useEffect(() => {
+        if (allUsersBid) {
+            setAuctionStarted(true);
+            console.log("All users paid : ", allUsersBid);
+        }
+        console.log("All users paid : ", allUsersBid);
+    }, [allUsersBid])
 
     useEffect(() => {
         if (auctionStarted) {
@@ -35,13 +46,13 @@ const Auction = () => {
         return () => {
             console.log("Auction Ended");
         }
-    }
-    , [auctionStarted])
+    } , [auctionStarted])
+
     return (
         <>
             <div className='flex justify-center py-3'>
                 <button className="bg-secondary-blue px-4 py-1 text-base text-white font-medium rounded-lg cursor-default" disabled={true} >
-                    <Countdown duration={"00:00:10"} format={"HH:mm:ss"} styles={""} setBidStarted={setAuctionStarted} />
+                    <CountdownTime endTime={"10:00:00"} format={"HH:mm:ss"} styles={""} setBidStarted={setAuctionStarted} />
                 </button>
             </div>
         </>
