@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Outfit } from "next/font/google";
+import { ExceptionProvider } from '@/context/exceptionContext';
 
 const outfit = Outfit({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ExceptionProvider>
       <AuthProvider>
         <main className={outfit.className}>
           <Component {...pageProps} />
@@ -34,6 +36,7 @@ export default function App({ Component, pageProps }) {
           />
         </main>
       </AuthProvider>
+      </ExceptionProvider>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );

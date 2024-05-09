@@ -56,7 +56,11 @@ function LoginComponent() {
             const accounts = await web3.eth.getAccounts();
             setAccounts(accounts);
             if (Cookies.get("firstTime") === "false") {
-                login("admin@gmail.com", "123456")
+                if (Cookies.get("User") === "Anirudh") {
+                    login("admin@gmail.com", "123456")
+                } else {
+                    login("rahul@gmail.com", "123456")
+                }
                 return;
             } else {
                 router.push('/create-account');

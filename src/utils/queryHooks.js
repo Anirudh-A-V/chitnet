@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 
-import { getAvailableChitfunds, getJoinedChitfunds, joinChitfund, getChitfund, payChitAmount, placeBid, startAuction, createChitfund, addBalanceToUser, getUserDetails } from "./queries";
+import { getAvailableChitfunds, getJoinedChitfunds, joinChitfund, getChitfund, payChitAmount, placeBid, startAuction, createChitfund, addBalanceToUser, getUserDetails, manageProxy, withdrawBalance, checkAllUsersPaid } from "./queries";
 
 
 export const useActiveChifunds = () => {
@@ -70,6 +70,17 @@ export const usePlaceBid = (handleSuccess, handleError) => {
     });
 }
 
+export const useManageProxy = (handleSuccess, handleError) => {
+    return useMutation(manageProxy, {
+        onSuccess(res) {
+            handleSuccess(res);
+        },
+        onError(err) {
+            handleError(err);
+        },
+    });
+}
+
 export const useStartAuction = (handleSuccess, handleError) => {
     return useMutation(startAuction, {
         onSuccess(res) {
@@ -100,6 +111,29 @@ export const useAddBalance = (handleSuccess, handleError) => {
         onError(err) {
             handleError(err);
         },
+    });
+}
+
+export const useWithdrawBalance = (handleSuccess, handleError) => {
+    return useMutation(withdrawBalance, {
+        onSuccess(res) {
+            handleSuccess(res);
+        },
+        onError(err) {
+            handleError(err);
+        },
+    });
+}
+
+export const useCheckAllUsersPaid = (id) => {
+    return useQuery({
+        queryKey: [`Check All Users Paid ${id}`],
+        queryFn: () => checkAllUsersPaid(id),
+        onSuccess: (data) => {
+            console.log("Data : ", data);
+            return data;
+        },
+        refetchInterval: 5000
     });
 }
 

@@ -144,13 +144,11 @@ const CreateChitfund = ({ openModel, setOpenModel }) => {
                                                         render={({ field }) => (
                                                             <input
                                                                 type="number"
+                                                                disabled
                                                                 {...field}
                                                                 placeholder={details?.monthlyAmount}
                                                                 className="border rounded px-2 py-1"
-                                                                onChange={(e) => {
-                                                                    setDetails({ ...details, monthlyAmount: e.target.value })
-                                                                    field.onChange(e)
-                                                                }}
+                                                                value={details?.chitAmount / details?.maxSubscribers}
                                                             />
                                                         )}
 
@@ -190,13 +188,11 @@ const CreateChitfund = ({ openModel, setOpenModel }) => {
                                                         render={({ field }) => (
                                                             <input
                                                                 type="number"
+                                                                disabled
                                                                 {...field}
                                                                 placeholder={details?.duration}
                                                                 className="border rounded px-2 py-1"
-                                                                onChange={(e) => {
-                                                                    setDetails({ ...details, duration: e.target.value })
-                                                                    field.onChange(e)
-                                                                }}
+                                                                value={details?.maxSubscribers}
                                                             />
                                                         )}
                                                     />

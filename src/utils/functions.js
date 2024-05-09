@@ -11,6 +11,13 @@ export const checkLimitReached = (currentValue, limit) => {
   return false;
 };
 
+export const differenceInMonths = (date1, date2) => {
+  const [year1, month1] = date1.split('-').map(Number);
+  const [year2, month2] = date2.split('-').map(Number);
+
+  return Math.ceil((year2 - year1) * 12 + (month2 - month1));
+}
+
 export const handleSendTransaction = async () => {
   try {
     // Check if MetaMask is installed

@@ -41,7 +41,7 @@ const Auction = () => {
         <>
             <div className='flex justify-center py-3'>
                 <button className="bg-secondary-blue px-4 py-1 text-base text-white font-medium rounded-lg cursor-default" disabled={true} >
-                    Time till Auction <Countdown duration={"00:00:10"} format={"HH:mm:ss"} styles={""} setBidStarted={setAuctionStarted} />
+                    <Countdown duration={"00:00:10"} format={"HH:mm:ss"} styles={""} setBidStarted={setAuctionStarted} />
                 </button>
             </div>
         </>

@@ -3,6 +3,8 @@ import Bidder from '@/components/Bidder';
 import Countdown from '@/components/Countdown';
 import Layout from '@/components/dashboard/Layout';
 import Loading from '@/components/Loading';
+import ManageProxy from '@/components/ManageProxy';
+import { useException } from '@/context/exceptionContext';
 import { useGetChitfund, usePayChitAmount } from '@/utils/queryHooks';
 import Cookies from 'js-cookie';
 import Head from 'next/head';
@@ -14,6 +16,7 @@ import { toast } from 'react-toastify';
 const ChitFund = () => {
     const queryClient = useQueryClient();
     const router = useRouter()
+    const { setException } = useException();
 
     const { id } = router.query;
     const { data: chitfund, isLoading, isError, error } = useGetChitfund(id);
@@ -33,6 +36,7 @@ const ChitFund = () => {
     const handleError = (data) => {
         console.log("Response for paying to chitfund : ", data);
         toast.error("Failed to pay");
+        setException(data.message);
     };
 
     const { mutate, isLoading: isPaying } = usePayChitAmount(handleSuccess, handleError);
@@ -46,8 +50,8 @@ const ChitFund = () => {
                 <div>
                     <div className="flex px-7 py-4 gap-4">
                         <button onClick={() => router.back()} className="">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                             </svg>
 
                         </button>
@@ -117,6 +121,9 @@ const ChitFund = () => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className='flex justify-center py-3'>
+                                    <ManageProxy id={id}/>
+                                </div>
                                 {
                                     chitfund?.biddedValues.some(bid => bid.uid === JSON.parse(Cookies.get("admin")).localId) ? (
                                         <>
@@ -129,9 +136,11 @@ const ChitFund = () => {
                                             </div>
                                         ) : (
                                             <div className='flex justify-center py-3'>
-                                                <button className="bg-green-500 px-4 py-1 text-base text-white font-medium rounded-lg cursor-pointer" onClick={() => {
-                                                    mutate({ id: chitfund?.id, uid: JSON.parse(Cookies.get("admin")).localId });
-                                                }} >
+                                                <button className={` px-4 py-1 ${chitfund?.status === "NOT STARTED" ? "bg-green-400 cursor-not-allowed" : "bg-green-500"} text-base text-white font-medium rounded-lg cursor-pointer`}
+                                                    disabled={chitfund?.status === "NOT STARTED" ? true : false}
+                                                    onClick={() => {
+                                                        mutate({ id: chitfund?.id, uid: JSON.parse(Cookies.get("admin")).localId });
+                                                    }} >
                                                     Pay Chit Amount
                                                 </button>
                                             </div>

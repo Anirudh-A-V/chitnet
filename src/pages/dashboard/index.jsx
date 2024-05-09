@@ -6,10 +6,11 @@ import Image from 'next/image';
 import { Menu, Transition } from '@headlessui/react'
 import Head from 'next/head';
 import JoinedChitfunds from '@/components/JoinedChitfunds';
-import { useAddBalance, useGetUserDetails, useJoinedChitfunds } from '@/utils/queryHooks';
+import { useAddBalance, useGetUserDetails, useJoinedChitfunds, useWithdrawBalance } from '@/utils/queryHooks';
 import Cookies from 'js-cookie';
 import { useQueryClient } from 'react-query';
 import { handleSendTransaction } from '@/utils/functions';
+import { useException } from '@/context/exceptionContext';
 
 
 const Dashboard = () => {
@@ -17,6 +18,8 @@ const Dashboard = () => {
   const { logout } = useAuth();
   const [addBalance, setAddBalance] = useState(0);
   const [addBalanceModal, setAddBalanceModal] = useState(false);
+  const { setException } = useException();
+  const [withdrawBalanceModal, setWithdrawBalanceModal] = useState(false);
 
   const { isLoading: isLoadingUser, isError: isErrorUser, data: user, error: errorUser } = useGetUserDetails(Cookies.get("admin") ? JSON.parse(Cookies.get("admin")).localId : "");
   const { isLoading: isLoadingJoined, isError: isErrorJoined, data: joinedChitfunds, error: errorJoinedChitfunds } = useJoinedChitfunds();
@@ -27,9 +30,13 @@ const Dashboard = () => {
 
   const handleError = (data) => {
     console.log(data);
+    if (data.message) {
+      setException(data.message);
+    }
   }
 
   const { mutate: addBalanceMutate, isLoading: isPaying } = useAddBalance(handleSuccess, handleError);
+  const { mutate: withdrawBalanceMutate, isLoading: isWithdrawing } = useWithdrawBalance(handleSuccess, handleError);
 
   return (
     <>
@@ -90,7 +97,7 @@ const Dashboard = () => {
                 <p className='text-white text-base font-medium '>balance</p>
                 <p className='text-white text-5xl font-semibold'>{`₹ ${user?.balance || 0}`}</p>
                 {
-                  addBalanceModal && (
+                  (addBalanceModal || withdrawBalanceModal) && (
                     <input
                       type='number'
                       placeholder='Enter amount'
@@ -122,12 +129,42 @@ const Dashboard = () => {
                       </button>
                     </div>
                   ) : (
-                    <button
-                      className='bg-white text-primary-blue px-4 py-1 rounded-md font-medium absolute bottom-4 right-4'
-                      onClick={() => setAddBalanceModal(true)}
-                    >
-                      Add Balance
-                    </button>
+                    withdrawBalanceModal ? (
+                      <div className='flex flex-row justify-end items-center gap-2 absolute bottom-4 right-4'>
+                        <button
+                          className='bg-white text-primary-blue px-2 py-1 rounded-md font-medium'
+                          onClick={() => {
+                            // handleSendTransaction()
+                            withdrawBalanceMutate({ uid: JSON.parse(Cookies.get("admin")).localId, amount: addBalance });
+                            queryClient.invalidateQueries({ queryKey: ["User Details"] });
+                            setWithdrawBalanceModal(false);
+                          }}
+                        >
+                          withdraw
+                        </button>
+                        <button
+                          className='bg-white text-primary-blue px-2 py-1 rounded-md font-medium'
+                          onClick={() => setWithdrawBalanceModal(false)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          className='bg-transparent border border-white text-white px-4 py-1 rounded-md font-medium absolute bottom-4 left-4'
+                          onClick={() => setWithdrawBalanceModal(true)}
+                        >
+                          Withdraw
+                        </button>
+                        <button
+                          className='bg-white text-primary-blue px-4 py-1 rounded-md font-medium absolute bottom-4 right-4'
+                          onClick={() => setAddBalanceModal(true)}
+                        >
+                          Add Balance
+                        </button>
+                      </>
+                    )
                   )
                 }
               </div>
